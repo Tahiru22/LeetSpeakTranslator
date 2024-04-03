@@ -1,0 +1,58 @@
+﻿@model IEnumerable<LeetSpeakTranslator.Models.TranslationRecord>
+
+<div class="container">
+    <h1 class="my-4">Leet Translator</h1>
+
+    <form asp-action="Translate" method="post" class="mb-4">
+        <div class="form-group">
+            <label for="textToTranslate">Enter text to translate:</label>
+            <input type="text" class="form-control" id="textToTranslate" name="text" placeholder="Enter text to translate">
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Translate</button>
+    </form>
+    <input type="text" id="searchInput" placeholder="Search records...">
+
+    <table id="translationTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Original Text</th>
+                <th>Translated Text</th>
+                <th>Translation Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var record in Model)
+            {
+                <tr>
+                    <td>@record.OriginalText</td>
+                    <td>@record.TranslatedText</td>
+                    <td>@record.TranslationDate.ToString("g")</td>
+                    <td>
+                        <form asp-action="Delete" method="post">
+                            <input type="hidden" name="id" value="@record.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    var searchValue = this.value.toLowerCase();
+    var rows = document.querySelectorAll('#translationTable tbody tr');
+
+    rows.forEach(function(row) {
+        var text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchValue) ? '' : 'none';
+    });
+});
+
+</script>
+
+
